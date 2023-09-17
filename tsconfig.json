@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "#/*": [
+        "./src/*"
+      ],
+      "#/prisma": [
+        "./src/prisma.ts"
+      ],
+      "#/api/graphql": [
+        "./src/api/graphql/*"
+      ],
+      "#/api/rest": [
+        "./src/api/rest/*"
+      ]
+    }
+  },
+  "exclude": [
+    "./node_modules/**/*",
+    "./dist/**/*"
+  ]
+}

@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator pothos {
+  provider = "prisma-pothos-types"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+//* ==== Models ==================================================================== *//
+
+model RefreshToken {
+  id          Int     @id @unique @default(autoincrement())
+  hashedToken String  @db.Text
+  userId      Int
+  revoked     Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "refreshToken")
+}
+
+model VerificationToken {
+  id        Int      @id @unique @default(autoincrement())
+  userId    Int
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "verificationToken")
+}
+
+model User {
+  id        Int    @id @unique @default(autoincrement())
+  steamid   String @unique
+  steamid64 String @unique
+  username  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  RefreshToken      RefreshToken[]
+  VerificationToken VerificationToken[]
+  Trick             Trick[]
+
+  @@map(name: "user")
+}
+
+model Complete {
+  id      Int @id @unique @default(autoincrement())
+  userId  Int
+  trickId Int
+
+  speed Int
+  time  Float
+
+  createdAt DateTime @default(now())
+
+  @@map(name: "complete")
+}
+
+model Trick {
+  id        Int    @id @unique @default(autoincrement())
+  name      String
+  point     Int
+  startType Int
+
+  authorId Int
+  mapId    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  User User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  Map  Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
+
+  Route Route[]
+
+  @@index([authorId])
+  @@index([mapId])
+  @@map(name: "trick")
+}
+
+model Map {
+  id       Int     @id @unique @default(autoincrement())
+  name     String
+  fullName String
+  preview  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  Trick   Trick[]
+  Trigger Trigger[]
+
+  @@map(name: "map")
+}
+
+model Trigger {
+  id       Int     @id @unique @default(autoincrement())
+  name     String
+  fullName String?
+  preview  String?
+  coords   Float[] @default([])
+
+  mapId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  Map Map @relation(fields: [mapId], references: [id], onDelete: Cascade)
+
+  Route Route[]
+
+  @@index([mapId])
+  @@map(name: "trigger")
+}
+
+model Route {
+  id        Int @id @unique @default(autoincrement())
+  trickId   Int
+  triggerId Int
+
+  Trick   Trick   @relation(fields: [trickId], references: [id], onDelete: Cascade)
+  Trigger Trigger @relation(fields: [triggerId], references: [id], onDelete: Cascade)
+
+  @@index([trickId])
+  @@index([triggerId])
+  @@map(name: "route")
+}
+
+//* ==== Enums ==================================================================== *//
+
+// enum ERole {
+//   User
+//   Admin
+// }
+
+model GqlMetric {
+  id            String  @id @unique @default(uuid())
+  name          String?
+  duration      Float
+  description   String?
+  kind          String
+  args          Json?
+  parentType    String
+  pothosOptions Json?
+
+  @@map(name: "gqlMetric")
+}

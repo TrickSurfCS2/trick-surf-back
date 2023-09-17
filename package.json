@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "back",
+  "description": "back",
+  "version": "1.0.0",
+  "source": "src/index.ts",
+  "main": "./dist/index.js",
+  "author": {
+    "name": "Ivan Kornilov",
+    "email": "ivan.kornilov@nordclan.com",
+    "url": "https://t.me/xsolncu"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "backend"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.x",
+    "pnpm": ">=8.x",
+    "bun": ">=1.x"
+  },
+  "scripts": {
+    "dev": "bun --bun run src/index.ts",
+    "start": "bun run prisma:generate && bun dist/index.js",
+    "build": "npm run prisma:generate && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "------------------------------------------------------------------------------------------------------------": "",
+    "lint": "eslint --fix \"./**/*.{ts,tsx}\"",
+    "format": "prettier -w \"./**/*.{ts,tsx,json,scss,md}\"",
+    "-------------------------------------------------------------------------------------------------------------": "",
+    "prisma:migrate": "prisma migrate dev --skip-seed",
+    "prisma:format": "prisma format",
+    "prisma:generate": "prisma generate",
+    "prisma:generate:watch": "prisma generate --watch",
+    "prisma:seed": "prisma db seed",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset",
+    "--------------------------------------------------------------------------------------------------------------": "",
+    "prepare": "husky install .husky",
+    "postinstall": "npm run prisma:generate"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "@pothos/core": "^3.35.0",
+    "@pothos/plugin-errors": "^3.11.1",
+    "@pothos/plugin-prisma": "^3.59.3",
+    "@pothos/plugin-relay": "^3.43.1",
+    "@pothos/plugin-tracing": "^0.5.8",
+    "@prisma/client": "^5.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "envalid": "^7.3.1",
+    "express": "^4.18.2",
+    "graphql": "^16.8.0",
+    "graphql-scalars": "^1.22.2",
+    "graphql-yoga": "^4.0.4",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.14",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.3",
+    "@types/node": "^20.6.2",
+    "@types/uuid": "^9.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "crypto": "^1.0.1",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "prisma": "^5.3.1",
+    "tsc-alias": "^1.8.7",
+    "typescript": "^5.2.2"
+  },
+  "prisma": {
+    "seed": "bun x ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "lint-staged": {
+    "src/**/*.+(js|ts)": [
+      "eslint --fix"
+    ],
+    "src/**/*.+(js|ts|json|scss|md)": [
+      "prettier --write",
+      "prettier -c"
+    ]
+  }
+}
