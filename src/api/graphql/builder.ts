@@ -1,5 +1,6 @@
 import type { context } from './context';
 import type PrismaTypes from '@pothos/plugin-prisma/generated';
+import type { NormalizeSchemeBuilderOptions } from '@pothos/core';
 import SchemaBuilder from '@pothos/core';
 import { DateResolver, DateTimeResolver } from 'graphql-scalars';
 import PrismaPlugin from '@pothos/plugin-prisma';
@@ -56,7 +57,8 @@ export const builder = new SchemaBuilder<ISchemaBuilder>({
         prisma.gqlMetric.create({ data });
       })
   }
-});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as unknown as NormalizeSchemeBuilderOptions<any>);
 
 builder.addScalarType('Date', DateResolver, {});
 builder.addScalarType('TimestampTZ', DateTimeResolver, {});

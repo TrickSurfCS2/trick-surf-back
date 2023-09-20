@@ -1,18 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "ESNext",
+    "strict": false,
+    // 
     "baseUrl": ".",
     "paths": {
       "#/*": [
@@ -29,6 +22,10 @@
       ]
     }
   },
+  "include": [
+    "src",
+    "prisma"
+  ],
   "exclude": [
     "./node_modules/**/*",
     "./dist/**/*"
