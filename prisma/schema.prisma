@@ -5,9 +5,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator pothos {
-  provider = "prisma-pothos-types"
-}
+// generator pothos {
+//   provider = "prisma-pothos-types"
+// }
 
 datasource db {
   provider     = "postgresql"
@@ -150,15 +150,3 @@ model Route {
 //   Admin
 // }
 
-model GqlMetric {
-  id            String  @id @unique @default(uuid())
-  name          String?
-  duration      Float
-  description   String?
-  kind          String
-  args          Json?
-  parentType    String
-  pothosOptions Json?
-
-  @@map(name: "gqlMetric")
-}

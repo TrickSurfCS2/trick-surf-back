@@ -15,9 +15,6 @@
 DROP TABLE "Complete";
 
 -- DropTable
-DROP TABLE "GqlMetric";
-
--- DropTable
 DROP TABLE "Map";
 
 -- DropTable
@@ -121,19 +118,6 @@ CREATE TABLE "trigger" (
     CONSTRAINT "trigger_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "gqlMetric" (
-    "id" TEXT NOT NULL,
-    "name" TEXT,
-    "duration" DOUBLE PRECISION NOT NULL,
-    "description" TEXT,
-    "kind" TEXT NOT NULL,
-    "args" JSONB,
-    "parentType" TEXT NOT NULL,
-    "pothosOptions" JSONB,
-
-    CONSTRAINT "gqlMetric_pkey" PRIMARY KEY ("id")
-);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "refreshToken_id_key" ON "refreshToken"("id");

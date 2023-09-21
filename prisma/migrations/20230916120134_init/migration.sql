@@ -34,19 +34,6 @@ CREATE TABLE "User" (
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "GqlMetric" (
-    "id" TEXT NOT NULL,
-    "name" TEXT,
-    "duration" DOUBLE PRECISION NOT NULL,
-    "description" TEXT,
-    "kind" TEXT NOT NULL,
-    "args" JSONB,
-    "parentType" TEXT NOT NULL,
-    "pothosOptions" JSONB,
-
-    CONSTRAINT "GqlMetric_pkey" PRIMARY KEY ("id")
-);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "RefreshToken_id_key" ON "RefreshToken"("id");
@@ -68,6 +55,3 @@ CREATE UNIQUE INDEX "User_login_key" ON "User"("login");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_password_key" ON "User"("password");
-
--- CreateIndex
-CREATE UNIQUE INDEX "GqlMetric_id_key" ON "GqlMetric"("id");
