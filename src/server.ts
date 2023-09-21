@@ -152,6 +152,10 @@ class Server {
 
   private createServer(server: express.Application) {
     try {
+      if (!this.options.ssl) {
+        throw 'ssl disabled';
+      }
+
       const httpsOptions = {
         key: readFileSync(join(__dirname, '../ssl/', 'privkey.pem')),
         cert: readFileSync(join(__dirname, '../ssl/', 'fullchain.pem'))
