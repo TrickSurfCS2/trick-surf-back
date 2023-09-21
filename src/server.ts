@@ -3,7 +3,6 @@ import type { IRedisOptions, RedisGateway } from '#/redis/redis.gateway';
 import type { SocketGateway } from '#/socket/socket.gateway';
 import cors from 'cors';
 import express from 'express';
-import { createYoga } from 'graphql-yoga';
 import http from 'http';
 import https from 'https';
 import os from 'os';
@@ -56,7 +55,7 @@ class Server {
       logger.info('---------------------------------------');
       logger.info(`✨ Server listening port ${config.port} on ${ssl ? 'HTTPS' : 'HTTP'}`);
       logger.info(`✨ ${os.hostname()}`);
-      logger.info(`GraphQL playground /graphql \n`);
+      // logger.info(`GraphQL playground /graphql \n`);
       this.server._router.stack.forEach(print.bind(null, []));
       logger.info('---------------------------------------');
     } catch (error) {

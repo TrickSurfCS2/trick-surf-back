@@ -3,8 +3,9 @@
 ```ts
 ✨ default server listening on the port 8080
 
-🌱 GraphQL playground
-http://localhost:8080/graphql
+// TODO
+// 🌱 GraphQL playground
+# http://localhost:8080/graphql
 
 🌱 REST endpoints
 http://localhost:8080/api
