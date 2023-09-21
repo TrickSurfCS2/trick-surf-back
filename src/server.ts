@@ -11,8 +11,6 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { setupRoutes } from '#/api/rest/routes';
 import errorMiddleware from '#/api/rest/middleware/error.middleware';
-import { schema } from '#/api/graphql/schema';
-import { context } from '#/api/graphql/context';
 import { allowCrossDomain } from '#/utils/allow-cross-domain';
 import { print } from '#/utils/print-route';
 import config from '#/config';
@@ -109,6 +107,7 @@ class Server {
   }
 
   private initializeGraphQl() {
+    // TODO
     // try {
     //   const yoga = createYoga({
     //     context,

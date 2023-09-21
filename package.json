@@ -46,19 +46,11 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@pothos/core": "^3.30.0",
-    "@pothos/plugin-errors": "^3.11.1",
-    "@pothos/plugin-prisma": "^3.51.1",
-    "@pothos/plugin-relay": "^3.43.0",
-    "@pothos/plugin-tracing": "^0.5.8",
     "@prisma/client": "^5.3.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "envalid": "^7.3.1",
     "express": "^4.18.2",
-    "graphql": "^16.6.0",
-    "graphql-scalars": "^1.22.0",
-    "graphql-yoga": "^3.9.1",
     "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "socket.io": "^4.7.2",
@@ -88,12 +80,7 @@
     "seed": "bun x ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "lint-staged": {
-    "src/**/*.+(js|ts)": [
-      "eslint --fix"
-    ],
-    "src/**/*.+(js|ts|json|scss|md)": [
-      "prettier --write",
-      "prettier -c"
-    ]
+    "*.{js,ts}": "eslint --fix",
+    "*": "prettier -w -u"
   }
 }
