@@ -2,7 +2,6 @@
   Warnings:
 
   - You are about to drop the `Complete` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `GqlMetric` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `Map` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `RefreshToken` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `Trick` table. If the table is not empty, all the data it contains will be lost.
@@ -160,6 +159,3 @@ CREATE UNIQUE INDEX "trigger_id_key" ON "trigger"("id");
 
 -- CreateIndex
 CREATE INDEX "trigger_mapId_idx" ON "trigger"("mapId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "gqlMetric_id_key" ON "gqlMetric"("id");
