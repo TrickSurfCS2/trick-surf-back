@@ -15,5 +15,5 @@ RUN bun run build
 RUN bun run prisma:generate
 
 ENV HOST 0.0.0.0
-CMD ["bun", "run", "bun:start"]
+CMD ["bun", "run", "start"]
 
