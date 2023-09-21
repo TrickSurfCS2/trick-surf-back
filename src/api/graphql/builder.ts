@@ -19,64 +19,64 @@ type ISchemaBuilder = {
   Context: ReturnType<typeof context>;
 };
 
-export const builder = new SchemaBuilder<ISchemaBuilder>({
-  plugins: [PrismaPlugin, ErrorsPlugin, RelayPlugin, TracingPlugin],
-  relayOptions: {
-    clientMutationId: 'omit',
-    cursorType: 'String'
-  },
-  prisma: {
-    client: prisma
-  },
-  errorOptions: {
-    defaultTypes: []
-  },
-  tracing: {
-    default: (config) => isRootField(config),
-    wrap: (resolver, options, config) =>
-      wrapResolver(resolver, (error, duration) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(
-            '\x1B[34m%s',
-            `Executed resolver ${config.parentType}.${config.name} in ${duration}ms`
-          );
+// export const builder = new SchemaBuilder<ISchemaBuilder>({
+//   plugins: [PrismaPlugin, ErrorsPlugin, RelayPlugin, TracingPlugin],
+//   relayOptions: {
+//     clientMutationId: 'omit',
+//     cursorType: 'String'
+//   },
+//   prisma: {
+//     client: prisma
+//   },
+//   errorOptions: {
+//     defaultTypes: []
+//   },
+//   tracing: {
+//     default: (config) => isRootField(config),
+//     wrap: (resolver, options, config) =>
+//       wrapResolver(resolver, (error, duration) => {
+//         if (process.env.NODE_ENV === 'development') {
+//           console.log(
+//             '\x1B[34m%s',
+//             `Executed resolver ${config.parentType}.${config.name} in ${duration}ms`
+//           );
 
-          if (error) console.log(error);
-        }
+//           if (error) console.log(error);
+//         }
 
-        const data = {
-          duration,
-          args: {},
-          description: config.description ?? '',
-          kind: config.kind,
-          pothosOptions: {},
-          name: config.name ?? '',
-          parentType: config.parentType ?? ''
-        };
+//         const data = {
+//           duration,
+//           args: {},
+//           description: config.description ?? '',
+//           kind: config.kind,
+//           pothosOptions: {},
+//           name: config.name ?? '',
+//           parentType: config.parentType ?? ''
+//         };
 
-        prisma.gqlMetric.create({ data });
-      })
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as unknown as NormalizeSchemeBuilderOptions<any>);
+//         prisma.gqlMetric.create({ data });
+//       })
+//   }
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// } as unknown as NormalizeSchemeBuilderOptions<any>);
 
-builder.addScalarType('Date', DateResolver, {});
-builder.addScalarType('TimestampTZ', DateTimeResolver, {});
-builder.scalarType('UUID', {
-  serialize: (n) => n,
-  parseValue: (n) => {
-    if (typeof n === 'string') {
-      return n;
-    }
+// builder.addScalarType('Date', DateResolver, {});
+// builder.addScalarType('TimestampTZ', DateTimeResolver, {});
+// builder.scalarType('UUID', {
+//   serialize: (n) => n,
+//   parseValue: (n) => {
+//     if (typeof n === 'string') {
+//       return n;
+//     }
 
-    throw new Error('Value must be string');
-  }
-});
-builder.queryType({});
-builder.mutationType({});
-builder.objectType(Error, {
-  name: 'Error',
-  fields: (t) => ({
-    message: t.exposeString('message')
-  })
-});
+//     throw new Error('Value must be string');
+//   }
+// });
+// builder.queryType({});
+// builder.mutationType({});
+// builder.objectType(Error, {
+//   name: 'Error',
+//   fields: (t) => ({
+//     message: t.exposeString('message')
+//   })
+// });

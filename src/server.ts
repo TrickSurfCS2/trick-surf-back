@@ -109,17 +109,16 @@ class Server {
   }
 
   private initializeGraphQl() {
-    try {
-      const yoga = createYoga({
-        context,
-        schema
-      });
-      this.server.use('/graphql', yoga);
-
-      logger.success('GraphQl');
-    } catch (e) {
-      logger.error('GraphQl', e);
-    }
+    // try {
+    //   const yoga = createYoga({
+    //     context,
+    //     schema
+    //   });
+    //   this.server.use('/graphql', yoga);
+    //   logger.success('GraphQl');
+    // } catch (e) {
+    //   logger.error('GraphQl', e);
+    // }
   }
 
   private initializeStaticFileRoutes() {

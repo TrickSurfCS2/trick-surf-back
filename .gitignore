@@ -2,4 +2,3 @@ node_modules
 dist
 ssl/*.pem
 *.env
-*.env.example

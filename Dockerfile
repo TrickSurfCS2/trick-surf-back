@@ -4,6 +4,9 @@ WORKDIR /opt/trick-surf-back
 
 COPY . .
 
+RUN apt-get update -y
+RUN apt-get install -y openssl
+
 RUN npm i bun -g
 RUN bun i --ignore-scripts
 
