@@ -5,29 +5,15 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "strict": false,
-    // 
+    //
     "baseUrl": ".",
     "paths": {
-      "#/*": [
-        "./src/*"
-      ],
-      "#/prisma": [
-        "./src/prisma.ts"
-      ],
-      "#/api/graphql": [
-        "./src/api/graphql/*"
-      ],
-      "#/api/rest": [
-        "./src/api/rest/*"
-      ]
+      "#/*": ["./src/*"],
+      "#/prisma": ["./src/prisma.ts"],
+      "#/api/graphql": ["./src/api/graphql/*"],
+      "#/api/rest": ["./src/api/rest/*"]
     }
   },
-  "include": [
-    "src",
-    "prisma"
-  ],
-  "exclude": [
-    "./node_modules/**/*",
-    "./dist/**/*"
-  ]
+  "include": ["src", "prisma"],
+  "exclude": ["./node_modules/**/*", "./dist/**/*"]
 }
