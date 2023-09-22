@@ -8,7 +8,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint', 'import'],
+  plugins: ['@typescript-eslint', 'import', 'unused-imports'],
   rules: {
     'no-console': 'off',
     'spaced-comment': 'off',

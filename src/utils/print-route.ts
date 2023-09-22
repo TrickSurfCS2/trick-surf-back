@@ -10,9 +10,11 @@ interface Layer {
 
 export function print(path: string[], layer: Layer): void {
   if (layer.route) {
-    layer.route.stack.forEach(print.bind(null, path.concat(split(layer.route.path))));
+    const newPath = path.concat(split(layer.route.path));
+    layer.route.stack.forEach((subLayer) => print(newPath, subLayer));
   } else if (layer.name === 'router' && layer?.handle?.stack) {
-    layer.handle.stack.forEach(print.bind(null, path.concat(split(layer.regexp))));
+    const newPath = path.concat(split(layer.regexp));
+    layer.handle.stack.forEach((subLayer) => print(newPath, subLayer));
   } else if (layer.method) {
     console.log(
       '\x1B[34m%s /%s',

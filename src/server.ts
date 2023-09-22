@@ -1,13 +1,13 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import type { IRedisOptions, RedisGateway } from '#/redis/redis.gateway';
 import type { SocketGateway } from '#/socket/socket.gateway';
 import type https from 'https';
+import prometheusMiddleware from './api/rest/middleware/prometheus.middleware';
 import cors from 'cors';
 import express from 'express';
+import { Counter, collectDefaultMetrics, register } from 'prom-client';
 import http from 'http';
 import os from 'os';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { setupRoutes } from '#/api/rest/routes';
 import errorMiddleware from '#/api/rest/middleware/error.middleware';
 import { allowCrossDomain } from '#/utils/allow-cross-domain';
@@ -40,6 +40,7 @@ class Server {
 
     this.initializeMiddlewares();
     this.initializeErrorHandling();
+    this.initializePrometheus();
     this.initializeControllers();
     this.initializeGraphQl();
     this.initializeStaticFileRoutes();
@@ -53,7 +54,7 @@ class Server {
 
       logger.info('---------------------------------------');
       logger.info(`✨ Server listening port ${config.port}`);
-      logger.info(`✨ ${os.hostname()}`);
+      logger.info(`✨ ${os.hostname()} \n`);
       // logger.info(`GraphQL playground /graphql \n`);
       this.server._router.stack.forEach(print.bind(null, []));
       logger.info('---------------------------------------');
@@ -93,9 +94,30 @@ class Server {
     }
   }
 
+  private initializePrometheus() {
+    try {
+      collectDefaultMetrics({ register });
+
+      logger.success('Prometheus');
+    } catch (e) {
+      logger.error('Prometheus', e);
+    }
+  }
+
   private initializeControllers() {
     try {
+      this.server.use(prometheusMiddleware);
+      this.server.get('/metrics', async (_: Request, res: Response, next: NextFunction) => {
+        try {
+          res.setHeader('Content-Type', register.contentType);
+          return res.send(await register.metrics());
+        } catch (err) {
+          next(err);
+        }
+      });
       this.server.get('/health', (_: Request, res: Response) => res.send('200'));
+      this.server.get('/logs', (_: Request, res: Response) => res.json(logger.logs));
+
       setupRoutes(this.server);
 
       logger.success('Controllers');
