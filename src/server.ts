@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express';
 import type { IRedisOptions, RedisGateway } from '#/redis/redis.gateway';
 import type { SocketGateway } from '#/socket/socket.gateway';
+import type https from 'https';
 import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import https from 'https';
 import os from 'os';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -19,7 +19,6 @@ export interface IServerOptions {
   host: string;
   port: number;
   redis: IRedisOptions;
-  ssl?: boolean;
 }
 
 class Server {
@@ -35,7 +34,7 @@ class Server {
 
   public async import(options: IServerOptions) {
     this.options = options;
-    this.webServer = this.createServer(this.server);
+    this.webServer = http.createServer(this.server);
     // TODO this.redisGateway = new RedisGateway(this.options.redis);
     // TODO this.socketGateway = new SocketGateway(this.webServer);
 
@@ -49,11 +48,11 @@ class Server {
 
   public async listen() {
     try {
-      const { port, ssl } = this.options;
+      const { port } = this.options;
       await this.webServer.listen(port);
 
       logger.info('---------------------------------------');
-      logger.info(`✨ Server listening port ${config.port} on ${ssl ? 'HTTPS' : 'HTTP'}`);
+      logger.info(`✨ Server listening port ${config.port}`);
       logger.info(`✨ ${os.hostname()}`);
       // logger.info(`GraphQL playground /graphql \n`);
       this.server._router.stack.forEach(print.bind(null, []));
@@ -133,7 +132,7 @@ class Server {
     try {
       //* set up server exceptions
       process.on('uncaughtException', (error: Error) => {
-        console.error('uncaughtException', error.stack);
+        console.error('Uncaught Exception', error.stack);
         process.exit(1);
       });
 
@@ -145,27 +144,6 @@ class Server {
       logger.success('NodeExceptions');
     } catch (e) {
       logger.error('NodeExceptions', e);
-    }
-  }
-
-  private createServer(server: express.Application) {
-    try {
-      if (!this.options.ssl) {
-        throw 'ssl disabled';
-      }
-
-      const httpsOptions = {
-        key: readFileSync(join(__dirname, '../ssl/', 'privkey.pem')),
-        cert: readFileSync(join(__dirname, '../ssl/', 'fullchain.pem'))
-      };
-
-      this.options.ssl = true;
-      logger.success('Create HTTPS server');
-      return https.createServer(httpsOptions, server);
-    } catch (e) {
-      this.options.ssl = false;
-      logger.error('Create HTTPS server', e);
-      return http.createServer(server);
     }
   }
 
