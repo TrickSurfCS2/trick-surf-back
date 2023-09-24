@@ -5,7 +5,7 @@ import type https from 'https';
 import prometheusMiddleware from './api/rest/middleware/prometheus.middleware';
 import cors from 'cors';
 import express from 'express';
-import { Counter, collectDefaultMetrics, register } from 'prom-client';
+import { collectDefaultMetrics, register } from 'prom-client';
 import http from 'http';
 import os from 'os';
 import { setupRoutes } from '#/api/rest/routes';

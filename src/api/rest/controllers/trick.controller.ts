@@ -23,8 +23,12 @@ class TrickController {
     res.json(tricks);
   };
 
-  private getList = async (_: Request, res: Response) => {
-    const tricks = await this.service.getList();
+  private getList = async (req: Request, res: Response) => {
+    const { mapId } = req.query;
+
+    const where = { mapId: mapId ? +mapId : undefined };
+
+    const tricks = await this.service.getList(where);
     res.json(tricks);
   };
 }
