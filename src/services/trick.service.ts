@@ -1,6 +1,10 @@
-import type { Prisma } from '@prisma/client';
 import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers';
+import { Prisma } from '@prisma/client';
 import prisma from '#/prisma';
+
+interface ListParams {
+  mapId?: number;
+}
 
 class TrickService {
   //* Create
@@ -8,32 +12,47 @@ class TrickService {
   //* Read
   getAll = async () => prisma.trick.findMany();
 
-  getList = async () => {
+  getList = async (params: ListParams) => {
+    const { mapId } = params;
+
     return prisma.$queryRaw`
-      SELECT st.id,
+      SELECT
+            CAST(ROW_NUMBER() OVER () AS INT) AS "index",
+            st.id,
             st.name,
             st.point,
             st."startType",
             st."createdAt",
-            (SELECT string_agg(str.name, ',')
-              FROM "trick" ts
-                      JOIN "route" sr ON ts.id = sr."trickId"
-                      JOIN "trigger" str ON str.id = sr."triggerId"
-              WHERE ts.id = st.id) AS "route",
-            (SELECT string_agg(CAST(str.id AS TEXT), ',')
-              FROM "trick" ts
-                      JOIN "route" sr ON ts.id = sr."trickId"
-                      JOIN "trigger" str ON str.id = sr."triggerId"
-              WHERE ts.id = st.id) AS "routeIds",
-            (SELECT CAST(count(sr.id) AS INT)
-              FROM "trick" ts
-                      JOIN "route" sr ON ts.id = sr."trickId"
-              WHERE ts.id = st.id) AS "trickLength",
-            p.steamid64 as "authorSteamid64",
-            p.username,
-            st."mapId"
-      FROM "trick" st
-      LEFT JOIN "user" p ON p.id = st."authorId";
+            (
+                SELECT string_agg(str.name, ',')
+                FROM "trick" ts
+                JOIN "route" sr ON ts.id = sr."trickId"
+                JOIN "trigger" str ON str.id = sr."triggerId"
+                WHERE ts.id = st.id
+            ) AS "route",
+            (
+                SELECT string_agg(CAST(str.id AS TEXT), ',')
+                FROM "trick" ts
+                JOIN "route" sr ON ts.id = sr."trickId"
+                JOIN "trigger" str ON str.id = sr."triggerId"
+                WHERE ts.id = st.id
+            ) AS "routeIds",
+            (
+                SELECT CAST(count(sr.id) AS INT)
+                FROM "trick" ts
+                JOIN "route" sr ON ts.id = sr."trickId"
+                WHERE ts.id = st.id
+            ) AS "trickLength",
+            author.steamid64 AS "authorSteamid64",
+            CAST(COALESCE(c.counts, 0) AS INT) AS "totalCompletes"
+        FROM "trick" st
+        LEFT JOIN (
+            SELECT sc."trickId", COUNT(sc."trickId") AS counts
+            FROM "complete" AS sc
+            GROUP BY sc."trickId"
+        ) c ON c."trickId" = st.id
+        LEFT JOIN "user" author ON author.id = st."authorId"
+        ${mapId ? Prisma.sql`WHERE st."mapId" = ${mapId}` : Prisma.empty}
     `;
   };
 
