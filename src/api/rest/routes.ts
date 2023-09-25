@@ -1,9 +1,14 @@
 import type { Application } from 'express';
+import MapController from '#/api/rest/controllers/map.controller';
 import UserController from '#/api/rest/controllers/user.controller';
 import TrickController from '#/api/rest/controllers/trick.controller';
 import TriggerController from '#/api/rest/controllers/trigger.controller';
 
 const controllers = [
+  {
+    basePath: '/api/v1',
+    controller: new MapController()
+  },
   {
     basePath: '/api/v1',
     controller: new UserController()

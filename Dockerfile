@@ -5,10 +5,10 @@ WORKDIR /opt/trick-surf-back
 COPY . .
 
 RUN apt-get update -y
-RUN apt-get install -y openssl
+RUN apt-get install -y apt-utils openssl
 
 RUN npm i bun -g
-RUN bun i --ignore-scripts
+RUN bun i --ignore-scripts --no-optional
 
 RUN bun install
 RUN bun run build

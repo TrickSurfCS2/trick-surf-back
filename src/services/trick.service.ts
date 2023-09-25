@@ -16,7 +16,7 @@ class TrickService {
     const { mapId } = params;
 
     return prisma.$queryRaw`
-      SELECT
+        SELECT
             CAST(ROW_NUMBER() OVER () AS INT) AS "index",
             st.id,
             st.name,
@@ -24,11 +24,15 @@ class TrickService {
             st."startType",
             st."createdAt",
             (
-                SELECT string_agg(str.name, ',')
-                FROM "trick" ts
-                JOIN "route" sr ON ts.id = sr."trickId"
-                JOIN "trigger" str ON str.id = sr."triggerId"
-                WHERE ts.id = st.id
+                SELECT string_agg(str."name", ',')
+                FROM (
+                    SELECT str.name
+                    FROM "trick" ts
+                    JOIN "route" sr ON ts.id = sr."trickId"
+                    JOIN "trigger" str ON str.id = sr."triggerId"
+                    WHERE ts.id = st.id
+                    ORDER BY sr.id
+                ) AS str
             ) AS "route",
             (
                 SELECT string_agg(CAST(str.id AS TEXT), ',')
@@ -36,6 +40,8 @@ class TrickService {
                 JOIN "route" sr ON ts.id = sr."trickId"
                 JOIN "trigger" str ON str.id = sr."triggerId"
                 WHERE ts.id = st.id
+                GROUP BY ts.id
+                ORDER BY ts.id DESC
             ) AS "routeIds",
             (
                 SELECT CAST(count(sr.id) AS INT)
