@@ -76,7 +76,11 @@ class Server {
       this.server.use(express.json());
       this.server.use(express.urlencoded({ extended: true }));
       this.server.use(allowCrossDomain);
-      this.server.use(cors());
+      this.server.use(
+        cors({
+          origin: 'https://xsolare.pro'
+        })
+      );
 
       logger.success('Middlewares');
     } catch (e) {
