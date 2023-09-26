@@ -78,7 +78,7 @@ class Server {
       this.server.use(allowCrossDomain);
       this.server.use(
         cors({
-          origin: 'https://xsolare.pro'
+          origin: ['https://xsolare.pro', 'http://localhost:5173']
         })
       );
 
