@@ -16,47 +16,37 @@ class TrickService {
     const { mapId } = params;
 
     return prisma.$queryRaw`
+        WITH route AS (
+          SELECT 
+            sr."trickId", 
+            string_agg(tr.name, ',') AS route,
+            string_agg(sr."triggerId"::text, ',') AS "routeIds"
+          FROM "route" sr
+          JOIN "trigger" tr ON tr.id = sr."triggerId" 
+          GROUP BY sr."trickId"
+        ),
+        completes AS (
+          SELECT 
+            sc."trickId", 
+            COUNT(sc."trickId") AS "totalCompletes"
+          FROM "complete" sc
+          GROUP BY sc."trickId"  
+        )
         SELECT
-            CAST(ROW_NUMBER() OVER () AS INT) AS "index",
-            st.id,
-            st.name,
-            st.point,
-            st."startType",
-            st."createdAt",
-            (
-                SELECT string_agg(str."name", ',')
-                FROM (
-                    SELECT str.name
-                    FROM "trick" ts
-                    JOIN "route" sr ON ts.id = sr."trickId"
-                    JOIN "trigger" str ON str.id = sr."triggerId"
-                    WHERE ts.id = st.id
-                    ORDER BY sr.id
-                ) AS str
-            ) AS "route",
-            (
-                SELECT string_agg(CAST(str.id AS TEXT), ',')
-                FROM "trick" ts
-                JOIN "route" sr ON ts.id = sr."trickId"
-                JOIN "trigger" str ON str.id = sr."triggerId"
-                WHERE ts.id = st.id
-                GROUP BY ts.id
-                ORDER BY ts.id DESC
-            ) AS "routeIds",
-            (
-                SELECT CAST(count(sr.id) AS INT)
-                FROM "trick" ts
-                JOIN "route" sr ON ts.id = sr."trickId"
-                WHERE ts.id = st.id
-            ) AS "trickLength",
-            author.steamid64 AS "authorSteamid64",
-            CAST(COALESCE(c.counts, 0) AS INT) AS "totalCompletes"
+          ROW_NUMBER() OVER () AS "index",
+          st.id,
+          st.name,
+          st.point,
+          st."startType",
+          st."createdAt",
+          r.route,
+          r."routeIds",
+          (SELECT COUNT(*) FROM "route" sr WHERE sr."trickId" = st.id) AS "trickLength",
+          author.steamid64 AS "authorSteamid64",
+          COALESCE(c."totalCompletes", 0) AS "totalCompletes"
         FROM "trick" st
-        LEFT JOIN (
-            SELECT sc."trickId", COUNT(sc."trickId") AS counts
-            FROM "complete" AS sc
-            GROUP BY sc."trickId"
-        ) c ON c."trickId" = st.id
+        LEFT JOIN route r ON r."trickId" = st.id
+        LEFT JOIN "completes" c ON c."trickId" = st.id  
         LEFT JOIN "user" author ON author.id = st."authorId"
         ${mapId ? Prisma.sql`WHERE st."mapId" = ${mapId}` : Prisma.empty}
     `;
