@@ -1,59 +1,60 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
+
 export enum LogType {
   Log = 'log',
   Info = 'info',
   Error = 'error',
-  Success = 'success'
+  Success = 'success',
 }
 
 export interface Log {
-  message: string;
-  value?: any;
-  type: LogType;
-  createdAt?: Date;
+  message: string
+  value?: any
+  type: LogType
+  createdAt?: Date
 }
 
 export class Logger {
-  logs: Log[] = [];
+  logs: Log[] = []
 
   log = (message: string) => {
     this.logs.push({
       message,
       type: LogType.Log,
-      createdAt: new Date()
-    });
+      createdAt: new Date(),
+    })
 
-    console.log('\x1b[33m%s\x1B[0m', message);
-  };
+    console.log('\x1B[33m%s\x1B[0m', message)
+  }
 
   info = (message: string) => {
     this.logs.push({
       message,
       type: LogType.Info,
-      createdAt: new Date()
-    });
+      createdAt: new Date(),
+    })
 
-    console.log('\x1b[34m%s\x1B[0m', message);
-  };
+    console.log('\x1B[34m%s\x1B[0m', message)
+  }
 
   error = (message: string, value?: any) => {
     this.logs.push({
       message,
       value,
       type: LogType.Error,
-      createdAt: new Date()
-    });
+      createdAt: new Date(),
+    })
 
-    console.log('\x1b[31m%s\x1B[0m', `❌ ${message}`, value);
-  };
+    console.log('\x1B[31m%s\x1B[0m', `❌ ${message}`, value)
+  }
 
   success = (message: string) => {
     this.logs.push({
       message,
       type: LogType.Success,
-      createdAt: new Date()
-    });
+      createdAt: new Date(),
+    })
 
-    console.log('\x1B[32m%s\x1B[0m', `✅ ${message}`);
-  };
+    console.log('\x1B[32m%s\x1B[0m', `✅ ${message}`)
+  }
 }

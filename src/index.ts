@@ -1,13 +1,13 @@
-import Server from './server';
-import config from './config';
+import Server from './server'
+import config from './config'
 
-import validateEnv from './utils/validate-env';
+import validateEnv from './utils/validate-env'
 
-const startServer = async () => {
-  validateEnv();
+async function startServer() {
+  validateEnv()
 
-  Server.import(config);
-  Server.listen();
-};
+  Server.import(config)
+  Server.listen()
+}
 
-startServer();
+startServer()

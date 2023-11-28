@@ -1,10 +1,10 @@
 export interface IUser {
-  id: string;
+  id: string
 
-  steamid: string;
-  steamid64: string;
-  username: string;
+  steamid: string
+  steamid64: string
+  username: string
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date
+  updatedAt: Date
 }

@@ -1,19 +1,19 @@
-import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers';
-import { Prisma } from '@prisma/client';
-import prisma from '#/prisma';
+import { Prisma } from '@prisma/client'
+import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers'
+import prisma from '#/prisma'
 
 interface ListParams {
-  mapId?: number;
+  mapId?: number
 }
 
 class TrickService {
   //* Create
 
   //* Read
-  getAll = async () => prisma.trick.findMany();
+  getAll = async () => prisma.trick.findMany()
 
   getList = async (params: ListParams) => {
-    const { mapId } = params;
+    const { mapId } = params
 
     return prisma.$queryRaw`
         WITH route AS (
@@ -49,26 +49,26 @@ class TrickService {
         LEFT JOIN "completes" c ON c."trickId" = st.id  
         LEFT JOIN "user" author ON author.id = st."authorId"
         ${mapId ? Prisma.sql`WHERE st."mapId" = ${mapId}` : Prisma.empty}
-    `;
-  };
+    `
+  }
 
   getAllByWhere = async <T>(payload: IWherePayload<T, Prisma.TrickWhereInput>) =>
-    prisma.trick.findMany({ ...payload.query, where: payload.where });
+    prisma.trick.findMany({ ...payload.query, where: payload.where })
 
   getByWhere = async <T>(payload: IWherePayload<T, Prisma.TrickWhereInput>) =>
-    prisma.trick.findFirst({ ...payload.query, where: payload.where });
+    prisma.trick.findFirst({ ...payload.query, where: payload.where })
 
   //* Update
   update = async <T>(
-    payload: IUpdatePayload<T, Prisma.TrickWhereUniqueInput, Prisma.TrickUpdateInput>
+    payload: IUpdatePayload<T, Prisma.TrickWhereUniqueInput, Prisma.TrickUpdateInput>,
   ) =>
     prisma.trick.update({
       ...payload.query,
       where: payload.where,
-      data: payload.data
-    });
+      data: payload.data,
+    })
 
   //* Delete
 }
 
-export default TrickService;
+export default TrickService

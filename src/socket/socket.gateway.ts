@@ -1,35 +1,30 @@
-import type { Socket } from 'socket.io';
-import type http from 'http';
-import { Server } from 'socket.io';
-import server, { logger } from '#/server';
-import { RedisService } from '#/services/redis.service';
+import type http from 'node:http'
+import type { Socket } from 'socket.io'
+import { Server } from 'socket.io'
+import server, { logger } from '#/server'
+import { RedisService } from '#/services/redis.service'
 
 export class SocketGateway {
-  private _socket: Server;
-  private _redisService = new RedisService();
+  private _socket: Server
+  private _redisService = new RedisService()
 
   constructor(webServer: http.Server) {
-    this._socket = new Server(webServer, {
-      cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-      }
-    });
-    logger.log('\n🔌 Socket.IO connected \n');
+    this._socket = new Server(webServer)
+    logger.log('\n🔌 Socket.IO connected \n')
 
-    server.redis.clear();
+    server.redis.clear()
 
-    this._socket.on('connection', this.handleConnection);
-    this._socket.on('disconnect', this.handleDisconnect);
+    this._socket.on('connection', this.handleConnection)
+    this._socket.on('disconnect', this.handleDisconnect)
   }
 
   get socket(): Server {
-    return this._socket;
+    return this._socket
   }
 
   async handleConnection(socket: Socket) {
     try {
-      this._redisService.add('unknown', socket.id);
+      this._redisService.add('unknown', socket.id)
 
       // const decodedToken = await this.authService.verifyJwt(socket.handshake.headers.authorization);
       // // const player: PlayersI = await this.playersService.findPlayerBySteamId64(
@@ -46,14 +41,15 @@ export class SocketGateway {
       //   this.server.sockets.sockets.get(socketSync).data.sockets = allPlayerConnection;
       // });
 
-      return this.socket.to(socket.id).emit('connected');
-    } catch (e) {
-      return socket.disconnect();
+      return this.socket.to(socket.id).emit('connected')
+    }
+    catch (e) {
+      return socket.disconnect()
     }
   }
 
   async handleDisconnect(socket: Socket) {
-    this._redisService.remove('unknown', socket.id);
+    this._redisService.remove('unknown', socket.id)
 
     // if (!this.socket.data?.player?.id) return;
 
@@ -61,6 +57,6 @@ export class SocketGateway {
     // await this.rediskaService.remove(socket.data.player.id, socket.id);
     // const isLastConnect = await this.rediskaService.ammount(socket.data.player.id);
 
-    socket.disconnect();
+    socket.disconnect()
   }
 }

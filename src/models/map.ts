@@ -1,9 +1,9 @@
 export interface IMap {
-  id: number;
-  name: string;
-  fullName: string;
-  preview: string;
+  id: number
+  name: string
+  fullName: string
+  preview: string
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date
+  updatedAt: Date
 }

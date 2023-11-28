@@ -1,10 +1,12 @@
-import type { IServerOptions } from './server';
-import * as dotenv from 'dotenv';
-import path from 'path';
+import process from 'node:process'
+import path from 'node:path'
+import * as dotenv from 'dotenv'
+import type { IServerOptions } from './server'
 
+const __dirname = path.resolve()
 dotenv.config({
-  path: path.resolve(__dirname, '../.env')
-});
+  path: path.resolve(__dirname, '../.env'),
+})
 
 export default {
   host: process.env.HOST || 'localhost',
@@ -15,6 +17,6 @@ export default {
     host: process.env.REDIS_HOST || '127.0.0.1',
     username: process.env.REDIS_USERNAME || 'default',
     password: process.env.REDIS_PASSWORD || 'redis',
-    db: +(process.env.REDIS_DB || 0)
-  }
-} as IServerOptions;
+    db: +(process.env.REDIS_DB || 0),
+  },
+} as IServerOptions

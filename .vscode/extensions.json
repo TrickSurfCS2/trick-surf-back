@@ -1,12 +1,10 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "stylelint.vscode-stylelint",
     "aaron-bond.better-comments",
-    "vue.volar",
-    "vue.vscode-typescript-vue-plugin",
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    "loiane.ts-extension-pack",
+    "naumovs.color-highlight"
   ],
-  "unwantedRecommendations": ["octref.vetur"]
+  "unwantedRecommendations": ["octref.vetur", "esbenp.prettier-vscode"]
 }

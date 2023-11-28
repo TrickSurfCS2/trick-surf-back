@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-import { PrismaClient } from '@prisma/client';
+/* eslint-disable ts/no-namespace */
+/* eslint-disable unused-imports/no-unused-vars */
+import { PrismaClient } from '@prisma/client'
 
-declare let global: { prisma: PrismaClient };
+declare let global: { prisma: PrismaClient }
 declare global {
   namespace NodeJS {
     interface Global {
-      prisma: PrismaClient;
+      prisma: PrismaClient
     }
   }
 }
 
-const prisma: PrismaClient = new PrismaClient();
+const prisma: PrismaClient = new PrismaClient()
 
-export default prisma;
+export default prisma

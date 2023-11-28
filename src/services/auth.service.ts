@@ -5,4 +5,4 @@ class AuthService {
   //* Delete
 }
 
-export default AuthService;
+export default AuthService
