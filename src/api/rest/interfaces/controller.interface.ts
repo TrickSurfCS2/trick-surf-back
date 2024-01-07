@@ -1,8 +1,8 @@
 import type { Router } from 'express'
 
-interface Controller {
-  path: string
-  router: Router
+abstract class AController {
+  public path!: string
+  public router!: Router
 }
 
-export default Controller
+export default AController

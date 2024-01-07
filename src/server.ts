@@ -6,11 +6,13 @@ import type { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import express from 'express'
 import { collectDefaultMetrics, register } from 'prom-client'
-import prometheusMiddleware from './api/rest/middleware/prometheus.middleware'
+import * as trpcExpress from '@trpc/server/adapters/express'
+import prometheusMiddleware from './utils/middleware/prometheus.middleware'
+import { createContext, trpcRouter } from './api/trpc'
+import { setupRoutes } from './api/rest'
 import type { SocketGateway } from '#/socket/socket.gateway'
 import type { IRedisOptions, RedisGateway } from '#/redis/redis.gateway'
-import { setupRoutes } from '#/api/rest/routes'
-import errorMiddleware from '#/api/rest/middleware/error.middleware'
+import errorMiddleware from '#/utils/middleware/error.middleware'
 import { allowCrossDomain } from '#/utils/allow-cross-domain'
 import { print } from '#/utils/print-route'
 import config from '#/config'
@@ -38,14 +40,19 @@ class Server {
   public async import(options: IServerOptions) {
     this.options = options
     this.webServer = http.createServer(this.server)
-    // TODO this.redisGateway = new RedisGateway(this.options.redis);
-    // TODO this.socketGateway = new SocketGateway(this.webServer);
+    // TODO
+    // this.redisGateway = new RedisGateway(this.options.redis);
+    // TODO
+    // this.socketGateway = new SocketGateway(this.webServer)
 
     this.initializeMiddlewares()
     this.initializeErrorHandling()
     this.initializePrometheus()
-    this.initializeControllers()
-    this.initializeGraphQl()
+
+    this.initializeRestControllers()
+    // this.initializeTRPC()
+    // this.initializeGraphQl()
+
     this.initializeStaticFileRoutes()
     this.setUpNodeExceptions()
   }
@@ -83,7 +90,7 @@ class Server {
       this.server.use(allowCrossDomain)
       this.server.use(
         cors({
-          origin: ['https://xsolare.pro', 'http://localhost:5173'],
+          origin: [`https://${config.host}`, 'http://localhost:5173'],
         }),
       )
 
@@ -116,7 +123,7 @@ class Server {
     }
   }
 
-  private initializeControllers() {
+  private initializeRestControllers() {
     try {
       this.server.use(prometheusMiddleware)
       this.server.get('/metrics', async (_: Request, res: Response, next: NextFunction) => {
@@ -140,18 +147,18 @@ class Server {
     }
   }
 
+  private initializeTRPC() {
+    this.server.use(
+      '/trpc',
+      trpcExpress.createExpressMiddleware({
+        router: trpcRouter,
+        createContext,
+      }),
+    )
+  }
+
   private initializeGraphQl() {
     // TODO
-    // try {
-    //   const yoga = createYoga({
-    //     context,
-    //     schema
-    //   });
-    //   this.server.use('/graphql', yoga);
-    //   logger.success('GraphQl');
-    // } catch (e) {
-    //   logger.error('GraphQl', e);
-    // }
   }
 
   private initializeStaticFileRoutes() {

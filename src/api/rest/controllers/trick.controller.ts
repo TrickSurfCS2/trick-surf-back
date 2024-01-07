@@ -1,36 +1,50 @@
+import { query } from 'express-validator'
 import type { Request, Response } from 'express'
 import { Router } from 'express'
 
+import type AController from '../interfaces/controller.interface'
 import TrickService from '#/services/trick.service'
+import { validateRequest } from '#/utils/middleware/validate.middleware'
 
-class TrickController {
-  public path = '/trick'
-
-  public router = Router()
+class TrickController implements AController {
   private service = new TrickService()
 
-  constructor() {
-    this.initializeRoutes()
-  }
+  public path = '/trick'
+  public router = Router()
 
-  private initializeRoutes() {
+  constructor() {
     this.router.get(`${this.path}/`, this.getAll)
-    this.router.get(`${this.path}/list`, this.getList)
+    this.router.get(`${this.path}/list`, [
+      query('mapId').optional().isInt(),
+      validateRequest,
+    ], this.getList)
   }
 
   private getAll = async (_: Request, res: Response) => {
-    const tricks = await this.service.getAll()
-    res.json(tricks)
+    try {
+      const tricks = await this.service.getAll()
+      res.status(200).json(tricks)
+    }
+    catch (error) {
+      res.status(500).json({ message: 'Internal server error' })
+    }
   }
 
   private getList = async (req: Request, res: Response) => {
-    const { mapId } = req.query
+    try {
+      const { mapId } = req.query
 
-    const where = { mapId: mapId ? +mapId : undefined }
+      const where = { mapId: mapId ? +mapId : undefined }
 
-    const tricks = await this.service.getList(where)
-    res.json(tricks)
+      const tricks = await this.service.getList(where)
+      res.status(200).json(tricks)
+    }
+    catch (error) {
+      res.status(500).json({ message: 'Internal server error' })
+    }
   }
 }
+
+export { TrickController }
 
 export default TrickController

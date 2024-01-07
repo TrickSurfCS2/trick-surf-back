@@ -5,6 +5,8 @@ import type { Log } from '../src/utils/logger'
 import prisma from '../src/prisma'
 import { LogType, Logger } from '../src/utils/logger'
 
+const __dirname = resolve('prisma')
+
 interface SeedFile {
   name: string
   path: string

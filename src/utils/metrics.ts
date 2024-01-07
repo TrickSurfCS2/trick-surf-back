@@ -24,4 +24,5 @@ const PromGaugeNodeVersion = new Gauge({
   help: 'The current version of node running',
   labelNames: ['version'],
 })
+
 PromGaugeNodeVersion.set({ version: process.version }, 1)
