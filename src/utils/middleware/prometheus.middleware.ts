@@ -16,7 +16,7 @@ function prometheusMiddleware(request: Request, response: Response, next: NextFu
   const acceptLanguage = headers['accept-language']
 
   // Извлечение типа браузера
-  const browserRegex = /(?:Chrome|Firefox|Safari|Opera|IE|Edge|Yandex|UCBrowser)/i
+  const browserRegex = /Chrome|Firefox|Safari|Opera|IE|Edge|Yandex|UCBrowser/i
   const browserMatch = userAgent?.match(browserRegex)
   const browser = browserMatch?.[0] ?? 'Unknown'
 
@@ -24,7 +24,7 @@ function prometheusMiddleware(request: Request, response: Response, next: NextFu
     PromCounterBrowser.inc({ browser })
 
   // Извлечение локации
-  const locationRegex = /(?:ru|en|fr|de|es)/i
+  const locationRegex = /ru|en|fr|de|es/i
   const locationMatch = acceptLanguage?.match(locationRegex)
   const location = locationMatch?.[0] ?? 'Unknown'
 

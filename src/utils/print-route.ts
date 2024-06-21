@@ -36,6 +36,6 @@ function split(thing: string | { fast_slash?: boolean }) {
     .toString()
     .replace('\\/?', '')
     .replace('(?=\\/|$)', '$')
-    .match(/^\/\^((?:\\[.*+?^${}()|[\]\\\/]|[^.*+?^${}()|[\]\\\/])*)\$\//)
+    .match(/^\/\^((?:\\[.*+?^${}()|[\]\\/]|[^.*+?^${}()|[\]\\/])*)\$\//)
   return match ? match[1].replace(/\\(.)/g, '$1').split('/') : `<complex:${thing.toString()}>`
 }
