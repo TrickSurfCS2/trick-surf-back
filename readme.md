@@ -5,6 +5,7 @@
 
 // TODO
 // 🌱 GraphQL playground
+
 # http://localhost:8080/graphql
 
 🌱 REST endpoints
@@ -12,6 +13,7 @@ http://localhost:8080/api
 ```
 
 Startup guideline
+
 ```bash
 docker run -p 5432:5432 \
   --name surfgxds-postgres \

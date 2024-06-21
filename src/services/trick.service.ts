@@ -33,7 +33,7 @@ class TrickService {
           GROUP BY sc."trickId"  
         )
         SELECT
-          ROW_NUMBER() OVER () AS "index",
+          CAST((ROW_NUMBER() OVER ()) AS int) AS "index",
           st.id,
           st.name,
           st.point,
@@ -41,9 +41,9 @@ class TrickService {
           st."createdAt",
           r.route,
           r."routeIds",
-          (SELECT COUNT(*) FROM "route" sr WHERE sr."trickId" = st.id) AS "trickLength",
+          CAST((SELECT COUNT(*) FROM "route" sr WHERE sr."trickId" = st.id) AS int) AS "trickLength",
           author.steamid64 AS "authorSteamid64",
-          COALESCE(c."totalCompletes", 0) AS "totalCompletes"
+          COALESCE(CAST(c."totalCompletes" AS int), 0) AS "totalCompletes"
         FROM "trick" st
         LEFT JOIN route r ON r."trickId" = st.id
         LEFT JOIN "completes" c ON c."trickId" = st.id  
