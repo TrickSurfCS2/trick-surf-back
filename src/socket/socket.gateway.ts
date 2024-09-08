@@ -1,8 +1,8 @@
-import type http from 'node:http'
-import type { Socket } from 'socket.io'
-import { Server } from 'socket.io'
 import server, { logger } from '#/server'
 import { RedisService } from '#/services/redis.service'
+import { Server } from 'socket.io'
+import type http from 'node:http'
+import type { Socket } from 'socket.io'
 
 export class SocketGateway {
   private _socket: Server
@@ -27,8 +27,8 @@ export class SocketGateway {
       this._redisService.add('unknown', socket.id)
 
       // const decodedToken = await this.authService.verifyJwt(socket.handshake.headers.authorization);
-      // // const player: PlayersI = await this.playersService.findPlayerBySteamId64(
-      // //   decodedToken.steamid64
+      // // const player: PlayersI = await this.playersService.findPlayerBySteamId(
+      // //   decodedToken.steamid
       // // );
       // if (!player) return this.disconnect(socket);
       // this.rediskaService.add(player.id, socket.id);
@@ -43,7 +43,7 @@ export class SocketGateway {
 
       return this.socket.to(socket.id).emit('connected')
     }
-    catch (e) {
+    catch {
       return socket.disconnect()
     }
   }

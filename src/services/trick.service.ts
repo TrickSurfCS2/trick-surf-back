@@ -1,6 +1,6 @@
+import prisma from '#/prisma'
 import { Prisma } from '@prisma/client'
 import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers'
-import prisma from '#/prisma'
 
 interface ListParams {
   mapId?: number
@@ -42,7 +42,7 @@ class TrickService {
           r.route,
           r."routeIds",
           CAST((SELECT COUNT(*) FROM "route" sr WHERE sr."trickId" = st.id) AS int) AS "trickLength",
-          author.steamid64 AS "authorSteamid64",
+          author.steamid AS "authorSteamid",
           COALESCE(CAST(c."totalCompletes" AS int), 0) AS "totalCompletes"
         FROM "trick" st
         LEFT JOIN route r ON r."trickId" = st.id

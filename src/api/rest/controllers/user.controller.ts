@@ -1,10 +1,10 @@
-import { param } from 'express-validator'
-import type { Request, Response } from 'express'
-import { Router } from 'express'
-
-import type AController from '../interfaces/controller.interface'
 import UserService from '#/services/user.service'
 import { validateRequest } from '#/utils/middleware/validate.middleware'
+import { Router } from 'express'
+
+import { param } from 'express-validator'
+import type { Request, Response } from 'express'
+import type AController from '../interfaces/controller.interface'
 
 class UserController implements AController {
   private service = new UserService()
@@ -29,7 +29,7 @@ class UserController implements AController {
       else
         res.json(user)
     }
-    catch (error) {
+    catch {
       res.status(500).json({ error: 'Internal Server Error' })
     }
   }
@@ -39,7 +39,7 @@ class UserController implements AController {
       const users = await this.service.getAll()
       res.json(users)
     }
-    catch (error) {
+    catch {
       res.status(500).json({ error: 'Internal Server Error' })
     }
   }

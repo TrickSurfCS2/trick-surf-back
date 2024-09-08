@@ -38,9 +38,10 @@ export function rmdirRecursive(path: string) {
     readdirSync(path).forEach((item) => {
       const current = resolve(path, item)
 
-      statSync(current).isDirectory()
-        ? rmdirRecursive(current)
-        : unlinkSync(current)
+      if (statSync(current).isDirectory())
+        rmdirRecursive(current)
+      else
+        unlinkSync(current)
     })
     rmdirSync(path)
   }

@@ -1,9 +1,9 @@
-import process from 'node:process'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import type { Log } from '../src/utils/logger'
+import process from 'node:process'
 import prisma from '../src/prisma'
-import { LogType, Logger } from '../src/utils/logger'
+import { Logger, LogType } from '../src/utils/logger'
+import type { Log } from '../src/utils/logger'
 
 const __dirname = resolve('prisma')
 
@@ -39,7 +39,7 @@ async function run() {
       }
       seedsStatus.push({ type: LogType.Success, message: seedFile.name })
     }
-    catch (e) {
+    catch {
       seedsStatus.push({ type: LogType.Error, message: seedFile.name })
     }
   }

@@ -1,8 +1,8 @@
 /* eslint-disable unused-imports/no-unused-vars */
-import { TRPCError, initTRPC } from '@trpc/server'
+import { initTRPC, TRPCError } from '@trpc/server'
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express'
-import MapRouter from './routers/map.router'
 import { authContext } from './context/auth.context'
+import MapRouter from './routers/map.router'
 
 async function createContext(opts: CreateExpressContextOptions) {
   const auth = await authContext(opts)
@@ -38,6 +38,6 @@ const trpcRouter = t.router({
   map: new MapRouter({ router, procedure: publicProcedure }).router,
 })
 
-export { trpcRouter, createContext }
+export { createContext, trpcRouter }
 export type TRPC = typeof t
 export type AppRouter = typeof trpcRouter

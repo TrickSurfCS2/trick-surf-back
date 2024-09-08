@@ -1,5 +1,5 @@
-import IORedis from 'ioredis'
 import { logger } from '#/server'
+import IORedis from 'ioredis'
 
 export interface IRedisOptions {
   port: number

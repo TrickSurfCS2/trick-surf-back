@@ -10,44 +10,14 @@ datasource db {
 
 //* ==== Models ==================================================================== *//
 
-model RefreshToken {
-  id          Int     @id @unique @default(autoincrement())
-  hashedToken String  @db.Text
-  userId      Int
-  revoked     Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@map(name: "refreshToken")
-}
-
-model VerificationToken {
-  id        Int      @id @unique @default(autoincrement())
-  userId    Int
-  revoked   Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@map(name: "verificationToken")
-}
-
 model User {
   id        Int    @id @unique @default(autoincrement())
   steamid   String @unique
-  steamid64 String @unique
   username  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  RefreshToken      RefreshToken[]
-  VerificationToken VerificationToken[]
   Trick             Trick[]
 
   @@map(name: "user")

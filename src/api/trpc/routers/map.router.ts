@@ -1,7 +1,7 @@
-import type { } from '@trpc/server'
-
-import type { TRPCRouterParams } from '../interfaces/router.interface'
 import MapService from '#/services/map.service'
+
+import type { } from '@trpc/server'
+import type { TRPCRouterParams } from '../interfaces/router.interface'
 
 class MapRouter {
   private service = new MapService()

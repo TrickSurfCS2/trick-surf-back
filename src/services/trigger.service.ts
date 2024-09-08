@@ -1,6 +1,6 @@
-import type { Prisma } from '@prisma/client'
-import type { IWherePayload } from '#/types/prisma-helpers'
 import prisma from '#/prisma'
+import type { IWherePayload } from '#/types/prisma-helpers'
+import type { Prisma } from '@prisma/client'
 
 class TriggerService {
   //* Create

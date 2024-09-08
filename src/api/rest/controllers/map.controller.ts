@@ -1,8 +1,8 @@
-import type { Request, Response } from 'express'
+import MapService from '#/services/map.service'
 import { Router } from 'express'
 
+import type { Request, Response } from 'express'
 import type AController from '../interfaces/controller.interface'
-import MapService from '#/services/map.service'
 
 class MapController implements AController {
   private service = new MapService()
@@ -19,7 +19,7 @@ class MapController implements AController {
       const data = await this.service.getAll()
       res.status(200).json(data)
     }
-    catch (error) {
+    catch {
       res.status(500).json({ error: 'Internal Server Error' })
     }
   }

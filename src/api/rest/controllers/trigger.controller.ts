@@ -1,10 +1,10 @@
-import { query } from 'express-validator'
-import type { Request, Response } from 'express'
-import { Router } from 'express'
-
-import type AController from '../interfaces/controller.interface'
 import TriggerService from '#/services/trigger.service'
 import { validateRequest } from '#/utils/middleware/validate.middleware'
+import { Router } from 'express'
+
+import { query } from 'express-validator'
+import type { Request, Response } from 'express'
+import type AController from '../interfaces/controller.interface'
 
 class TriggerController implements AController {
   private service = new TriggerService()
@@ -35,7 +35,7 @@ class TriggerController implements AController {
       const trigger = await this.service.getAllByWhere({ where })
       res.json(trigger)
     }
-    catch (error) {
+    catch {
       res.status(500).json({ message: 'Internal Server Error' })
     }
   }

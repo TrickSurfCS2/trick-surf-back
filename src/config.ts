@@ -1,5 +1,5 @@
-import process from 'node:process'
 import path from 'node:path'
+import process from 'node:process'
 import * as dotenv from 'dotenv'
 import type { IServerOptions } from './server'
 

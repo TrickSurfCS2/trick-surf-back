@@ -1,5 +1,5 @@
-import Server from './server'
 import config from './config'
+import Server from './server'
 
 import validateEnv from './utils/validate-env'
 

@@ -1,8 +1,8 @@
 import type { Application } from 'express'
 import MapController from './controllers/map.controller'
-import UserController from './controllers/user.controller'
 import TrickController from './controllers/trick.controller'
 import TriggerController from './controllers/trigger.controller'
+import UserController from './controllers/user.controller'
 
 const controllers = [
   {
