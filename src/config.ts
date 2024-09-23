@@ -1,7 +1,7 @@
+import type { IServerOptions } from './server'
 import path from 'node:path'
 import process from 'node:process'
 import * as dotenv from 'dotenv'
-import type { IServerOptions } from './server'
 
 const __dirname = path.resolve()
 dotenv.config({

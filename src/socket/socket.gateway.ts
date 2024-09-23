@@ -1,8 +1,8 @@
+import type http from 'node:http'
+import type { Socket } from 'socket.io'
 import server, { logger } from '#/server'
 import { RedisService } from '#/services/redis.service'
 import { Server } from 'socket.io'
-import type http from 'node:http'
-import type { Socket } from 'socket.io'
 
 export class SocketGateway {
   private _socket: Server

@@ -1,6 +1,6 @@
+import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers'
 import prisma from '#/prisma'
 import { Prisma } from '@prisma/client'
-import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers'
 
 interface ListParams {
   mapId?: number

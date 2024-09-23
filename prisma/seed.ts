@@ -1,9 +1,9 @@
+import type { Log } from '../src/utils/logger'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import process from 'node:process'
 import prisma from '../src/prisma'
 import { Logger, LogType } from '../src/utils/logger'
-import type { Log } from '../src/utils/logger'
 
 const __dirname = resolve('prisma')
 

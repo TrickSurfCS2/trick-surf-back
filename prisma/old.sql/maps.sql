@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS "maps" (
 );
 
 INSERT INTO maps (id, name, alternative_name, src, date_created) VALUES
-    (0, 'none', 'none', NULL, '2022-01-24 16:10:46'),
     (1, 'ski2', 'surf_ski2', NULL, '2022-01-24 16:10:46'),
     (2, 'strafes', 'surf_strafes', NULL, '2022-01-24 16:10:46'),
-    (3, 'hns_tyo_docg_gxd', 'hns_tyo_docg', NULL, '2022-12-25 19:17:07');
+    (3, 'pastel', 'hns_pastel', NULL, '2022-12-25 19:17:07');

@@ -1,5 +1,5 @@
-import { PromCounterBrowser, PromCounterLocation, PromCounterRoute } from '#/utils/metrics'
 import type { NextFunction, Request, Response } from 'express'
+import { PromCounterBrowser, PromCounterLocation, PromCounterRoute } from '#/utils/metrics'
 
 /**
  * Middleware function for Prometheus metrics.

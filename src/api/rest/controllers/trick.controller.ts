@@ -1,10 +1,10 @@
-import TrickService from '#/services/trick.service'
-import { validateRequest } from '#/utils/middleware/validate.middleware'
-import { Router } from 'express'
-
-import { query } from 'express-validator'
 import type { Request, Response } from 'express'
 import type AController from '../interfaces/controller.interface'
+import TrickService from '#/services/trick.service'
+
+import { validateRequest } from '#/utils/middleware/validate.middleware'
+import { Router } from 'express'
+import { query } from 'express-validator'
 
 class TrickController implements AController {
   private service = new TrickService()

@@ -1,6 +1,6 @@
-import prisma from '#/prisma'
 import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers'
 import type { Prisma } from '@prisma/client'
+import prisma from '#/prisma'
 
 class UserService {
   //* Create

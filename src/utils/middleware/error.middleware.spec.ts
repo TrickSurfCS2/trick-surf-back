@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
 import type { ErrorRequestHandler, Request, Response } from 'express'
+import { describe, expect, it, vi } from 'vitest'
 import errorMiddleware from './error.middleware'
 
 describe('errorMiddleware', () => {

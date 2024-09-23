@@ -1,8 +1,8 @@
-import MapService from '#/services/map.service'
-import { Router } from 'express'
-
 import type { Request, Response } from 'express'
 import type AController from '../interfaces/controller.interface'
+
+import MapService from '#/services/map.service'
+import { Router } from 'express'
 
 class MapController implements AController {
   private service = new MapService()

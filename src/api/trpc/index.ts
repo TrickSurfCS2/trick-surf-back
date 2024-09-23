@@ -1,6 +1,6 @@
+import type { CreateExpressContextOptions } from '@trpc/server/adapters/express'
 /* eslint-disable unused-imports/no-unused-vars */
 import { initTRPC, TRPCError } from '@trpc/server'
-import type { CreateExpressContextOptions } from '@trpc/server/adapters/express'
 import { authContext } from './context/auth.context'
 import MapRouter from './routers/map.router'
 
