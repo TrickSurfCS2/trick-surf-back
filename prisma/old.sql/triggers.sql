@@ -339,13 +339,4 @@ INSERT INTO triggers (id, name, alternative_name, x, y, z, map_id, src) VALUES
 	(66699, 'pit_ramp', 'pit_ramp', NULL, NULL, NULL, 2, NULL),
 	(66700, 'ibeam_platform', 'ibeam_platform', NULL, NULL, NULL, 2, NULL),
 	(66701, 'turtle_ramp_slant', 'turtle_ramp_slant', NULL, NULL, NULL, 2, NULL),
-	(66702, 'turtle_beams', 'turtle_beams', NULL, NULL, NULL, 2, NULL),
-	(66703, 'stena_bottom_floor', NULL, NULL, NULL, NULL, 3, NULL),
-	(66704, 'stena_floor', NULL, NULL, NULL, NULL, 3, NULL),
-	(66705, 'ggd_floor', 'ggd_floor', NULL, NULL, NULL, 3, NULL),
-	(66706, 'stena_container', 'stena_container', NULL, NULL, NULL, 3, NULL),
-	(66707, 'between_tower_floor', 'between_tower_floor', NULL, NULL, NULL, 3, NULL),
-	(66708, 'pira_ramp', 'pira_ramp', NULL, NULL, NULL, 3, NULL),
-	(66709, 'ben_pick', 'pick', NULL, NULL, NULL, 3, NULL),
-	(66710, 'ben_box_3', 'stena_box_3', NULL, NULL, NULL, 3, NULL),
-	(66711, 'pira_floor', NULL, NULL, NULL, NULL, 3, NULL);
+	(66702, 'turtle_beams', 'turtle_beams', NULL, NULL, NULL, 2, NULL);

@@ -11,16 +11,28 @@ datasource db {
 //* ==== Models ==================================================================== *//
 
 model User {
-  id        Int    @id @unique @default(autoincrement())
-  steamid   String @unique
-  username  String
+  id       Int    @id @unique @default(autoincrement())
+  steamid  String @unique
+  username String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  Trick             Trick[]
+  Trick          Trick[]
+  UserPermission UserPermission[]
 
   @@map(name: "user")
+}
+
+model UserPermission {
+  id         Int        @id @unique @default(autoincrement())
+  userId     Int
+  permission Permission
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "user_permission")
 }
 
 model Complete {
@@ -31,7 +43,9 @@ model Complete {
   speed Int
   time  Float
 
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  TimeWr    TimeWr[]
+  SpeedWr   SpeedWr[]
 
   @@map(name: "complete")
 }
@@ -51,7 +65,9 @@ model Trick {
   User User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   Map  Map  @relation(fields: [mapId], references: [id], onDelete: Cascade)
 
-  Route Route[]
+  Route   Route[]
+  TimeWr  TimeWr[]
+  SpeedWr SpeedWr[]
 
   @@index([authorId])
   @@index([mapId])
@@ -63,6 +79,7 @@ model Map {
   name     String
   fullName String
   preview  String?
+  origin   Float[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -106,10 +123,42 @@ model Route {
   @@map(name: "route")
 }
 
+//* ==== WR HELPERS (actually not needed :D) =============================================================== *//
+
+model TimeWr {
+  id         Int      @id @unique @default(autoincrement())
+  trickId    Int      @unique
+  completeId Int
+  updatedAt  DateTime @default(now())
+
+  Trick    Trick    @relation(fields: [trickId], references: [id], onDelete: Cascade)
+  Complete Complete @relation(fields: [completeId], references: [id], onDelete: Cascade)
+
+  @@index([trickId])
+  @@index([completeId])
+  @@map(name: "time_wr")
+}
+
+model SpeedWr {
+  id         Int      @id @unique @default(autoincrement())
+  trickId    Int      @unique
+  completeId Int
+  updatedAt  DateTime @default(now())
+
+  Trick    Trick    @relation(fields: [trickId], references: [id], onDelete: Cascade)
+  Complete Complete @relation(fields: [completeId], references: [id], onDelete: Cascade)
+
+  @@index([trickId])
+  @@index([completeId])
+  @@map(name: "speed_wr")
+}
+
 //* ==== Enums ==================================================================== *//
 
-// enum ERole {
-//   User
-//   Admin
-// }
-
+enum Permission {
+  UpdateTrick
+  CreateTrick
+  DeleteTrick
+  BanUser
+  Teleport
+}
