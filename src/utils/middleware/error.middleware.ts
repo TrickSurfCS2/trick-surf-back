@@ -13,10 +13,10 @@ function errorMiddleware(
   response: Response,
   next: NextFunction,
 ) {
-  const errorCode = response.statusCode || 500
+  const errorCode = request.statusCode || 500
 
   if (error instanceof Error) {
-    console.error(error) // Log the error
+    console.error(error)
 
     if (!response.headersSent) {
       response.status(errorCode).send({
@@ -41,4 +41,4 @@ function errorMiddleware(
   }
 }
 
-export default errorMiddleware
+export { errorMiddleware }

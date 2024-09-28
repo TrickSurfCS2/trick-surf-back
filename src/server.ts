@@ -1,6 +1,5 @@
-import type { IRedisOptions, RedisGateway } from '#/redis/redis.gateway'
+import type { RedisGateway } from '#/redis/redis.gateway'
 import type { SocketGateway } from '#/socket/socket.gateway'
-import type { NextFunction, Request, Response } from 'express'
 import type https from 'node:https'
 import http from 'node:http'
 import os from 'node:os'
@@ -8,20 +7,20 @@ import process from 'node:process'
 import config from '#/config'
 import { allowCrossDomain } from '#/utils/allow-cross-domain'
 import { Logger } from '#/utils/logger'
-import errorMiddleware from '#/utils/middleware/error.middleware'
+import { errorMiddleware } from '#/utils/middleware/error.middleware'
 import { print } from '#/utils/print-route'
-import * as trpcExpress from '@trpc/server/adapters/express'
+// import * as trpcExpress from '@trpc/server/adapters/express'
 import cors from 'cors'
 import express from 'express'
 import { collectDefaultMetrics, register } from 'prom-client'
 import { setupRoutes } from './api/rest'
-import { createContext, trpcRouter } from './api/trpc'
-import prometheusMiddleware from './utils/middleware/prometheus.middleware'
+// import { createContext, trpcRouter } from './api/trpc'
+import { prometheusMiddleware } from './utils/middleware/prometheus.middleware'
 
 export interface IServerOptions {
   host: string
   port: number
-  redis: IRedisOptions
+  // redis: IRedisOptions
 }
 
 const logger = new Logger()
@@ -37,21 +36,20 @@ class Server {
     this.server = express()
   }
 
-  public async import(options: IServerOptions) {
+  public async init(options: IServerOptions) {
     this.options = options
     this.webServer = http.createServer(this.server)
+
     // TODO
     // this.redisGateway = new RedisGateway(this.options.redis);
-    // TODO
     // this.socketGateway = new SocketGateway(this.webServer)
+    // this.initializeTRPC()
+    // this.initializeGraphQl()
 
+    this.initializeRestControllers()
     this.initializeMiddlewares()
     this.initializeErrorHandling()
     this.initializePrometheus()
-
-    this.initializeRestControllers()
-    // this.initializeTRPC()
-    // this.initializeGraphQl()
 
     this.initializeStaticFileRoutes()
     this.setUpNodeExceptions()
@@ -60,7 +58,7 @@ class Server {
   public async listen() {
     try {
       const { port } = this.options
-      await this.webServer.listen(port)
+      this.webServer.listen(port)
 
       logger.info('---------------------------------------')
       logger.info(`✨ Server listening port ${config.port}`)
@@ -124,9 +122,14 @@ class Server {
   }
 
   private initializeRestControllers() {
+    // function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
+    //   console.log('NICE')
+    //   res.status(500).json({ message: 'Something went wrong!' })
+    // }
+
     try {
       this.server.use(prometheusMiddleware)
-      this.server.get('/metrics', async (_: Request, res: Response, next: NextFunction) => {
+      this.server.get('/metrics', async (_: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
           res.setHeader('Content-Type', register.contentType)
           res.send(await register.metrics())
@@ -135,10 +138,10 @@ class Server {
           next(err)
         }
       })
-      this.server.get('/health', (_: Request, res: Response) => {
+      this.server.get('/health', (_: express.Request, res: express.Response) => {
         res.send('200')
       })
-      this.server.get('/logs', (_: Request, res: Response) => {
+      this.server.get('/logs', (_: express.Request, res: express.Response) => {
         res.json(logger.logs)
       })
 
@@ -151,19 +154,18 @@ class Server {
     }
   }
 
-  private initializeTRPC() {
-    this.server.use(
-      '/trpc',
-      trpcExpress.createExpressMiddleware({
-        router: trpcRouter,
-        createContext,
-      }),
-    )
-  }
+  // private initializeTRPC() {
+  //   this.server.use(
+  //     '/trpc',
+  //     trpcExpress.createExpressMiddleware({
+  //       router: trpcRouter,
+  //       createContext,
+  //     }),
+  //   )
+  // }
 
-  private initializeGraphQl() {
-    // TODO
-  }
+  // private initializeGraphQl() {
+  // }
 
   private initializeStaticFileRoutes() {
     try {

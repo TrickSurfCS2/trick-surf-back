@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import type AController from '../interfaces/controller.interface'
 
 import MapService from '#/services/map.service'
+import { catcherMiddleware } from '#/utils/middleware'
 import { Router } from 'express'
 
 class MapController implements AController {
@@ -11,17 +12,12 @@ class MapController implements AController {
   public router = Router()
 
   constructor() {
-    this.router.get(`${this.path}/`, this.getAll)
+    this.router.get(`${this.path}/`, catcherMiddleware(this.getAll))
   }
 
   private getAll = async (_: Request, res: Response) => {
-    try {
-      const data = await this.service.getAll()
-      res.status(200).json(data)
-    }
-    catch {
-      res.status(500).json({ error: 'Internal Server Error' })
-    }
+    const data = await this.service.getAll()
+    res.status(200).json(data)
   }
 }
 

@@ -1,6 +1,6 @@
 import type { ErrorRequestHandler, Request, Response } from 'express'
 import { describe, expect, it, vi } from 'vitest'
-import errorMiddleware from './error.middleware'
+import { errorMiddleware } from './error.middleware'
 
 describe('errorMiddleware', () => {
   // Handles an Error object and sends a response with status code and error message.

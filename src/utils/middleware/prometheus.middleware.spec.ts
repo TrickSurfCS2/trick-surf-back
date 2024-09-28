@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import { PromCounterBrowser, PromCounterLocation, PromCounterRoute } from '#/utils/metrics'
 import { describe, expect, it, vi } from 'vitest'
-import prometheusMiddleware from './prometheus.middleware'
+import { prometheusMiddleware } from './prometheus.middleware'
 
 describe('prometheusMiddleware', () => {
   // Middleware increments counters for browser type, location, and route.

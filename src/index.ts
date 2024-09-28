@@ -6,7 +6,7 @@ import validateEnv from './utils/validate-env'
 async function startServer() {
   validateEnv()
 
-  Server.import(config)
+  Server.init(config)
   Server.listen()
 }
 

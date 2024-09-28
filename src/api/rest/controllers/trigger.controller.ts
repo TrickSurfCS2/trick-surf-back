@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import type AController from '../interfaces/controller.interface'
 import TriggerService from '#/services/trigger.service'
 
-import { validateRequest } from '#/utils/middleware/validate.middleware'
+import { catcherMiddleware, validateRequest } from '#/utils/middleware'
 import { Router } from 'express'
 import { query } from 'express-validator'
 
@@ -18,26 +18,21 @@ class TriggerController implements AController {
       query('fullName').optional().isString(),
       query('id').optional().isInt(),
       validateRequest,
-    ], this.getAll)
+    ], catcherMiddleware(this.getAll))
   }
 
   private getAll = async (req: Request, res: Response) => {
-    try {
-      const { mapId, name, fullName, id } = req.query
+    const { mapId, name, fullName, id } = req.query
 
-      const where = {
-        id: id ? +id : undefined,
-        mapId: mapId ? +mapId : undefined,
-        name: name ? `${name}` : undefined,
-        fullName: fullName ? `${fullName}` : undefined,
-      }
+    const where = {
+      id: id ? +id : undefined,
+      mapId: mapId ? +mapId : undefined,
+      name: name ? `${name}` : undefined,
+      fullName: fullName ? `${fullName}` : undefined,
+    }
 
-      const trigger = await this.service.getAllByWhere({ where })
-      res.json(trigger)
-    }
-    catch {
-      res.status(500).json({ message: 'Internal Server Error' })
-    }
+    const trigger = await this.service.getAllByWhere({ where })
+    res.json(trigger)
   }
 }
 

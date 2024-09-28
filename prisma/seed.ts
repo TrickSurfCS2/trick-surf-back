@@ -14,6 +14,7 @@ interface SeedFile {
 
 const seedFiles: SeedFile[] = [
   { name: 'user', path: 'sql/user.sql' },
+  { name: 'user-permission', path: 'sql/user-permission.sql' },
   { name: 'map', path: 'sql/map.sql' },
   { name: 'trigger', path: 'sql/trigger.sql' },
   { name: 'trick', path: 'sql/trick.sql' },

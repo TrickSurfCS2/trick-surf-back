@@ -1,6 +1,8 @@
+import type { TrickRecord } from '#/models/trick'
 import type { IUpdatePayload, IWherePayload } from '#/types/prisma-helpers'
+import type { Prisma } from '@prisma/client'
 import prisma from '#/prisma'
-import { Prisma } from '@prisma/client'
+import { toCamelCaseKeys } from '#/utils/helpers'
 
 interface ListParams {
   mapId?: number
@@ -10,63 +12,81 @@ class TrickService {
   //* Create
 
   //* Read
-  getAll = async () => prisma.trick.findMany()
+  getAll = async () => {
+    return prisma.trick.findMany()
+  }
 
   getList = async (params: ListParams) => {
     const { mapId } = params
 
-    return prisma.$queryRaw`
-        WITH route AS (
-          SELECT 
-            sr."trickId", 
-            string_agg(tr.name, ',') AS route,
-            string_agg(sr."triggerId"::text, ',') AS "routeIds"
-          FROM "route" sr
-          JOIN "trigger" tr ON tr.id = sr."triggerId" 
-          GROUP BY sr."trickId"
-        ),
-        completes AS (
-          SELECT 
-            sc."trickId", 
-            COUNT(sc."trickId") AS "totalCompletes"
-          FROM "complete" sc
-          GROUP BY sc."trickId"  
-        )
-        SELECT
-          CAST((ROW_NUMBER() OVER ()) AS int) AS "index",
-          st.id,
-          st.name,
-          st.point,
-          st."startType",
-          st."createdAt",
-          r.route,
-          r."routeIds",
-          CAST((SELECT COUNT(*) FROM "route" sr WHERE sr."trickId" = st.id) AS int) AS "trickLength",
-          author.steamid AS "authorSteamid",
-          COALESCE(CAST(c."totalCompletes" AS int), 0) AS "totalCompletes"
-        FROM "trick" st
-        LEFT JOIN route r ON r."trickId" = st.id
-        LEFT JOIN "completes" c ON c."trickId" = st.id  
-        LEFT JOIN "user" author ON author.id = st."authorId"
-        ${mapId ? Prisma.sql`WHERE st."mapId" = ${mapId}` : Prisma.empty}
-    `
+    const tricksWithTriggers = await prisma.trick.findMany({
+      include: {
+        Route: {
+          include: {
+            Trigger: true,
+          },
+        },
+      },
+      where: {
+        mapId,
+      },
+    })
+
+    const transformedResult = tricksWithTriggers.map(trick => ({
+      ...trick,
+      triggers: trick.Route.map(route => route.Trigger),
+      Route: undefined,
+    }))
+
+    const camelCaseResult = toCamelCaseKeys(transformedResult)
+
+    return camelCaseResult
   }
 
-  getAllByWhere = async <T>(payload: IWherePayload<T, Prisma.TrickWhereInput>) =>
-    prisma.trick.findMany({ ...payload.query, where: payload.where })
+  getAllByWhere = async <T>(payload: IWherePayload<T, Prisma.TrickWhereInput>) => {
+    return prisma.trick.findMany({ ...payload.query, where: payload.where })
+  }
 
-  getByWhere = async <T>(payload: IWherePayload<T, Prisma.TrickWhereInput>) =>
-    prisma.trick.findFirst({ ...payload.query, where: payload.where })
+  getByWhere = async <T>(payload: IWherePayload<T, Prisma.TrickWhereInput>) => {
+    return prisma.trick.findFirst({ ...payload.query, where: payload.where })
+  }
+
+  getRecord = async (trickId: number): Promise<TrickRecord> => {
+    const result = await prisma.$queryRaw<TrickRecord[]>`
+      SELECT 
+        twr."time" as "timeWR",
+        twr_user."steamid" as "steamidTimeWR",
+        twr_user."username" as "usernameTimeWR",
+        twr."id" as "completeIdTimeWR",
+        swr."speed" as "speedWR",
+        swr_user."username" as "usernameSpeedWR",
+        swr_user."steamid" as "steamidSpeedWR",
+        swr."id" as "completeIdSpeedWR"
+      FROM public."trick" as t
+      LEFT JOIN 
+        public."complete" twr ON twr."id" = 
+          (SELECT twri."completeId" FROM public."time_wr" as twri WHERE twri."trickId" = ${trickId})
+      LEFT JOIN 
+        public."complete" swr ON swr."id" = 
+          (SELECT swri."completeId" FROM public."speed_wr" as swri WHERE swri."trickId" = ${trickId})
+      LEFT JOIN 
+        public."user" twr_user ON twr."userId" = twr_user."id"
+      LEFT JOIN 
+        public."user" swr_user ON swr."userId" = swr_user."id"
+      WHERE t."id" = ${trickId};
+    `
+
+    return result[0]
+  }
 
   //* Update
-  update = async <T>(
-    payload: IUpdatePayload<T, Prisma.TrickWhereUniqueInput, Prisma.TrickUpdateInput>,
-  ) =>
-    prisma.trick.update({
+  update = async <T>(payload: IUpdatePayload<T, Prisma.TrickWhereUniqueInput, Prisma.TrickUpdateInput>) => {
+    return prisma.trick.update({
       ...payload.query,
       where: payload.where,
       data: payload.data,
     })
+  }
 
   //* Delete
 }

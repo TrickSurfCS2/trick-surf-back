@@ -37,4 +37,4 @@ function prometheusMiddleware(request: Request, response: Response, next: NextFu
   next()
 }
 
-export default prometheusMiddleware
+export { prometheusMiddleware }
