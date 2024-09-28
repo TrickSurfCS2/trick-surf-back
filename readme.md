@@ -33,4 +33,5 @@ docker run -p 5432:5432 \
 ```
 
 After launching, perform migrations and seeding of all data, this can be done by writing:
+
 - `bun run prisma:reset`

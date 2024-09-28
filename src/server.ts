@@ -129,14 +129,18 @@ class Server {
       this.server.get('/metrics', async (_: Request, res: Response, next: NextFunction) => {
         try {
           res.setHeader('Content-Type', register.contentType)
-          return res.send(await register.metrics())
+          res.send(await register.metrics())
         }
         catch (err) {
           next(err)
         }
       })
-      this.server.get('/health', (_: Request, res: Response) => res.send('200'))
-      this.server.get('/logs', (_: Request, res: Response) => res.json(logger.logs))
+      this.server.get('/health', (_: Request, res: Response) => {
+        res.send('200')
+      })
+      this.server.get('/logs', (_: Request, res: Response) => {
+        res.json(logger.logs)
+      })
 
       setupRoutes(this.server)
 
