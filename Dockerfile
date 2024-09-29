@@ -4,8 +4,10 @@ FROM oven/bun AS node_modules
 WORKDIR /opt/app
 
 COPY ./package*.json ./bun* ./
+COPY ./prisma/schema.prisma ./prisma/schema.prisma
 
 RUN bun install --ignore-scripts
+RUN bun prisma:generate
 
 # ---- Build ------------ #
 FROM node:22.2.0-bullseye-slim AS dist
