@@ -1,0 +1,432 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0",
+    "description": "API documentation for the application"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/map": {
+      "get": {
+        "tags": [
+          "map"
+        ],
+        "summary": "Get all maps",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trick": {
+      "get": {
+        "tags": [
+          "trick"
+        ],
+        "summary": "Get all tricks",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trick"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trick/list": {
+      "get": {
+        "tags": [
+          "trick"
+        ],
+        "summary": "Get tricks by mapId",
+        "parameters": [
+          {
+            "name": "mapId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trick"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trick/{trickId}/wr": {
+      "get": {
+        "tags": [
+          "trick"
+        ],
+        "summary": "Get trick record by trickId",
+        "parameters": [
+          {
+            "name": "trickId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrickRecord"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trigger": {
+      "get": {
+        "tags": [
+          "trigger"
+        ],
+        "summary": "Get all triggers",
+        "parameters": [
+          {
+            "name": "mapId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fullName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trigger"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/user/{id}/permission": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user permissions by user ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Permission"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Map": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Trick": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "point": {
+            "type": "integer"
+          },
+          "startType": {
+            "type": "integer"
+          },
+          "authorId": {
+            "type": "integer"
+          },
+          "mapId": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TrickRecord": {
+        "type": "object",
+        "properties": {
+          "timeWR": {
+            "type": "number"
+          },
+          "steamidTimeWR": {
+            "type": "string"
+          },
+          "usernameTimeWR": {
+            "type": "string"
+          },
+          "completeIdTimeWR": {
+            "type": "integer"
+          },
+          "speedWR": {
+            "type": "integer"
+          },
+          "usernameSpeedWR": {
+            "type": "string"
+          },
+          "steamidSpeedWR": {
+            "type": "string"
+          },
+          "completeIdSpeedWR": {
+            "type": "integer"
+          }
+        }
+      },
+      "Trigger": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          },
+          "coords": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "mapId": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "steamid": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Permission": {
+        "type": "string",
+        "enum": [
+          "UpdateTrick",
+          "CreateTrick",
+          "DeleteTrick",
+          "BanUser",
+          "Teleport"
+        ]
+      }
+    }
+  }
+}

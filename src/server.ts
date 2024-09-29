@@ -14,6 +14,7 @@ import cors from 'cors'
 import express from 'express'
 import { collectDefaultMetrics, register } from 'prom-client'
 import { setupRoutes } from './api/rest'
+import swaggerDocs from './swagger'
 // import { createContext, trpcRouter } from './api/trpc'
 import { prometheusMiddleware } from './utils/middleware/prometheus.middleware'
 
@@ -86,11 +87,8 @@ class Server {
       this.server.use(express.json())
       this.server.use(express.urlencoded({ extended: true }))
       this.server.use(allowCrossDomain)
-      this.server.use(
-        cors({
-          origin: [`https://${config.host}`, 'http://localhost:5173'],
-        }),
-      )
+      this.server.use(cors({ origin: [`https://${config.host}`, 'http://localhost:5173'] }))
+      this.server.disable('x-powered-by')
 
       logger.success('Middlewares')
     }
@@ -122,12 +120,8 @@ class Server {
   }
 
   private initializeRestControllers() {
-    // function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
-    //   console.log('NICE')
-    //   res.status(500).json({ message: 'Something went wrong!' })
-    // }
-
     try {
+      this.server.use(prometheusMiddleware)
       this.server.use(prometheusMiddleware)
       this.server.get('/metrics', async (_: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
@@ -146,6 +140,7 @@ class Server {
       })
 
       setupRoutes(this.server)
+      swaggerDocs(this.server)
 
       logger.success('Controllers')
     }
